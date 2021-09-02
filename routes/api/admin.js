@@ -1,5 +1,7 @@
 const router = require("express").Router();
 
+const path = require("path");
+
 const { isAdmin } = require("../../middleware/middleware");
 const isAuthenticated = require("../../middleware/auth");
 
@@ -14,6 +16,9 @@ const validateBranchInput = require("../../validation/branch");
 const isEmpty = require("../../validation/is-empty");
 
 const findLocation = require("./utils");
+
+const multer = require("multer");
+const uploads = multer({ dest: "uploads/" });
 
 /*
   @route /api/admin/users
@@ -362,6 +367,12 @@ router.post("/reject/:id", isAuthenticated, isAdmin, async (req, res) => {
   } catch (e) {
     res.json(e.message).status(500);
   }
+});
+
+router.post("/profile-upload-single", uploads.single("profile-file"));
+
+router.get("/uploads", (req, res) => {
+  res.sendFile(path.join(__dirname, "../../upload.html"));
 });
 
 module.exports = router;
