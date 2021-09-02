@@ -360,4 +360,12 @@ router.post("/order", isAuthenticated, async (req, res) => {
   }
 });
 
+/*
+  @route  /api/users/order/
+  @method POST
+  @desc   Create Order
+  @access Private
+*/
+router.post("/order", isAuthenticated, async (req, res) => {});
+
 module.exports = router;
