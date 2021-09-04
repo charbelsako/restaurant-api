@@ -19,7 +19,7 @@
 - [x] list/add/update/delete branches (admin)
 - [x] Add/update/delete menu categories (admin)
 - [x] Add/update/delete menu items (admin)
-- [ ] Add image to local repo (admin)
+- [x] Add image to local repo (admin)
 - [x] List/Create/Update order
   - [x] the restaurant branch is selected automatically based on client location, client should be withing 5km of the branch
   - [x] by default all orders have pending status `default: "pending"`
