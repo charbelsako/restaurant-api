@@ -369,7 +369,16 @@ router.post("/reject/:id", isAuthenticated, isAdmin, async (req, res) => {
   }
 });
 
-router.post("/profile-upload-single", uploads.single("profile-file"));
+/*
+  @route  /api/admin/profile-upload-single
+  @method POST
+  @desc   Upload an image
+  @access Private
+*/
+router.post("/profile-upload-single", uploads.single("profile-file"), (req, res) => {
+  console.log("done");
+  res.send("done").status(200);
+});
 
 router.get("/uploads", (req, res) => {
   res.sendFile(path.join(__dirname, "../../upload.html"));

@@ -337,7 +337,7 @@ router.post("/order", isAuthenticated, async (req, res) => {
     console.log(req.body);
     const menuItemsIds = req.body.items.split(",");
     const addressId = req.body.address;
-    const address = await Address.find({ id: addressId });
+    const address = await Address.findOne({ id: addressId });
     const currentLocation = { lat: address.lat, lon: address.lon };
 
     let chosenBranch = getNearestRestaurant(currentLocation);
@@ -361,11 +361,74 @@ router.post("/order", isAuthenticated, async (req, res) => {
 });
 
 /*
-  @route  /api/users/order/
-  @method POST
-  @desc   Create Order
+  @route  /api/users/order/:id
+  @method PUT
+  @desc   Update Order
   @access Private
 */
-router.post("/order", isAuthenticated, async (req, res) => {});
+router.put("/order/:id", isAuthenticated, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const order_data = await Order.findOne({ id });
+    const isOrderPending = order_data.status === "pending";
+    if (!isOrderPending) {
+      res.json({
+        message: `Order can't be updated, because it was already ${order_data.status} `,
+      });
+    }
+
+    const menuItemsIds = req.body.items.split(",");
+    const addressId = req.body.address;
+    const address = await Address.findOne({ id: addressId });
+    const currentLocation = { lat: address.lat, lon: address.lon };
+
+    let chosenBranch = getNearestRestaurant(currentLocation);
+
+    if (chosenBranch == null) {
+      res.json({ message: "you're not near any branch" });
+    }
+
+    const order = await Order.findOneAndUpdate(
+      { id: id },
+      {
+        status: "updated",
+        branch: chosenBranch.id,
+        items: [...menuItemsIds],
+        address: addressId,
+      },
+      { new: true }
+    );
+    res.json(order).status(200);
+  } catch (e) {
+    res.json(e.message).status(500);
+  }
+});
+
+/*
+  @route  /api/users/order/:id
+  @method DELETE
+  @desc   Cancel Order
+  @access Private
+*/
+router.delete("/order/:id", isAuthenticated, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const order_data = await Order.findOne({ id });
+    const isOrderPending = order_data.status === "pending";
+    if (!isOrderPending) {
+      res.json({
+        message: `Order can't be cancelled, because it was ${order_data.status} already`,
+      });
+    }
+    const order = await Order.findOneAndUpdate(
+      { id: id },
+      { status: "cancelled" },
+      { new: true }
+    );
+    res.json(order).status(200);
+  } catch (e) {
+    res.json(e.message).status(500);
+  }
+});
 
 module.exports = router;
