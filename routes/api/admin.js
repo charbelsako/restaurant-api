@@ -18,7 +18,17 @@ const isEmpty = require("../../validation/is-empty");
 const findLocation = require("./utils");
 
 const multer = require("multer");
-const uploads = multer({ dest: "uploads/" });
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "../../uploads"));
+  },
+  filename: function (req, file, cb) {
+    const name = file;
+    cb(null, file.originalname);
+  },
+});
+
+const uploads = multer({ storage: storage });
 
 /*
   @route /api/admin/users
