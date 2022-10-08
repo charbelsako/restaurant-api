@@ -4,6 +4,6 @@
 
 @layer base {
   .input {
-    @apply p-3 rounded text-black
+    @apply p-3 rounded text-black block w-full
   }
 }
