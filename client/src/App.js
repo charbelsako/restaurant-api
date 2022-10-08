@@ -4,6 +4,7 @@ import AddMenuItem from "./components/AddMenuItem"
 import AddCategory from "./components/AddCategory"
 import { useEffect, useState } from "react"
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom"
+import axios from "axios"
 
 function App() {
   const [items, setItems] = useState([
@@ -15,7 +16,9 @@ function App() {
   ])
 
   useEffect(() => {
-    console.log("Get the menu data (not implemented)")
+    ;(async () => {
+      await axios.get("/api/menu/items")
+    })()
   }, [])
 
   return (
