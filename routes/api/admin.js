@@ -165,7 +165,7 @@ router.post("/menuitem/", async (req, res) => {
     }
 
     if (!isValid || !isEmpty(errors)) {
-      return res.json({ errors }).status(400)
+      return res.status(400).json({ errors })
     }
 
     const name = req.body.name

@@ -4,7 +4,6 @@ const isEmpty = require("./is-empty")
 module.exports = function validateMenuItemInput(data) {
   let errors = {}
   data.name = !isEmpty(data.name) ? data.name : ""
-  data.price = !isEmpty(data.price) ? data.price : ""
   data.category = !isEmpty(data.category) ? data.category : ""
 
   if (!Validator.isLength(data.name, { min: 2, max: 30 })) {
@@ -13,10 +12,6 @@ module.exports = function validateMenuItemInput(data) {
 
   if (data.price <= 0) {
     errors.price = "Price must be greater than zero"
-  }
-
-  if (typeof data.price === "string") {
-    errors.price = "Price must be an integer"
   }
 
   return {
