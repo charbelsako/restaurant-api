@@ -1,7 +1,6 @@
-const mongoose = require("mongoose");
-const { Schema } = mongoose;
+const mongoose = require("mongoose")
+const { Schema } = mongoose
 
-//Create Schema
 const MenuItemSchema = new Schema({
   name: {
     type: String,
@@ -15,6 +14,6 @@ const MenuItemSchema = new Schema({
     ref: "categories",
     type: Schema.Types.ObjectId,
   },
-});
+})
 
-module.exports = MenuItem = mongoose.model("items", MenuItemSchema);
+module.exports = MenuItem = mongoose.model("items", MenuItemSchema)
