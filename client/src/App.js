@@ -17,7 +17,7 @@ function App() {
   useEffect(() => {
     ;(async () => {
       const itemsResult = await axios.get('/api/menu/items')
-      setItems(itemsResult.data)
+      setItems(itemsResult.data.items)
     })()
   }, [])
 

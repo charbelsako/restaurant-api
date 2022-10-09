@@ -1,6 +1,6 @@
-const router = require("express").Router()
-const MenuItem = require("../../models/MenuItem")
-const Category = require("../../models/Category")
+const router = require('express').Router()
+const MenuItem = require('../../models/MenuItem')
+const Category = require('../../models/Category')
 
 /**
  * @method: GET
@@ -8,9 +8,9 @@ const Category = require("../../models/Category")
  * @returns: all the menu items
  * @access Public
  */
-router.get("/items", async (req, res) => {
+router.get('/items', async (req, res) => {
   try {
-    const items = await MenuItem.find({})
+    const items = await MenuItem.find({}).populate('category')
 
     res.status(200).json({ items })
   } catch (e) {
@@ -24,7 +24,7 @@ router.get("/items", async (req, res) => {
  * @returns: all the menu items
  * @access Public
  */
-router.get("/categories", async (req, res) => {
+router.get('/categories', async (req, res) => {
   try {
     const categories = await Category.find({})
 
