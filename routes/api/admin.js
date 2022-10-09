@@ -1,23 +1,23 @@
-const router = require("express").Router()
+const router = require('express').Router()
 
-const path = require("path")
+const path = require('path')
 
-const User = require("../../models/User")
-const Category = require("../../models/Category")
-const MenuItem = require("../../models/MenuItem")
-const Branch = require("../../models/Branch")
+const User = require('../../models/User')
+const Category = require('../../models/Category')
+const MenuItem = require('../../models/MenuItem')
+const Branch = require('../../models/Branch')
 
-const validateCategoryInput = require("../../validation/category")
-const validateMenuItemInput = require("../../validation/menuItem")
-const validateBranchInput = require("../../validation/branch")
-const isEmpty = require("../../validation/is-empty")
+const validateCategoryInput = require('../../validation/category')
+const validateMenuItemInput = require('../../validation/menuItem')
+const validateBranchInput = require('../../validation/branch')
+const isEmpty = require('../../validation/is-empty')
 
-const findLocation = require("./utils")
+const findLocation = require('./utils')
 
-const multer = require("multer")
+const multer = require('multer')
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "../../uploads"))
+    cb(null, path.join(__dirname, '../../uploads'))
   },
   filename: function (req, file, cb) {
     const name = file
@@ -33,7 +33,7 @@ const uploads = multer({ storage: storage })
   @desc return all users in the database
   @access private (admin)
 */
-router.get("/users", async (req, res) => {
+router.get('/users', async (req, res) => {
   try {
     const users = await User.find()
     res.status(200).json(users)
@@ -48,7 +48,7 @@ router.get("/users", async (req, res) => {
   @desc Enable/Disable a user from the database
   @access private (admin)
 */
-router.post("/users/", async (req, res) => {
+router.post('/users/', async (req, res) => {
   try {
     const email = req.body.email
     const user = await User.findOne({ email: email })
@@ -72,7 +72,7 @@ router.post("/users/", async (req, res) => {
   @desc adds a category to the database
   @access private (admin)
 */
-router.post("/category/", async (req, res) => {
+router.post('/category/', async (req, res) => {
   try {
     const { errors, isValid } = validateCategoryInput(req.body)
 
@@ -85,7 +85,7 @@ router.post("/category/", async (req, res) => {
     const data = await category.save()
     res.json(data).status(200)
   } catch (e) {
-    res.status(200).json({ error: "couldn't add category" })
+    res.status(500).json({ status: 'failed', message: e.message, error: e })
   }
 })
 
@@ -95,7 +95,7 @@ router.post("/category/", async (req, res) => {
   @desc updates a category to the database
   @access private (admin)
 */
-router.put("/category/:name", async (req, res) => {
+router.put('/category/:name', async (req, res) => {
   try {
     const { errors, isValid } = validateCategoryInput(req.body)
 
@@ -112,7 +112,7 @@ router.put("/category/:name", async (req, res) => {
       return res.json({ success: true }).status(200)
     }
 
-    return res.json({ message: "no match found" }).status(200)
+    return res.json({ message: 'no match found' }).status(200)
   } catch (e) {
     res.status(200).json({ error: "couldn't update category" })
   }
@@ -124,14 +124,14 @@ router.put("/category/:name", async (req, res) => {
   @desc deletes a category to the database
   @access private (admin)
 */
-router.delete("/category/:name", async (req, res) => {
+router.delete('/category/:name', async (req, res) => {
   try {
     const cat = await Category.findOne({ name: req.params.name })
     if (cat) {
       await Category.findOneAndDelete({ name: req.params.name })
       return res.json({ success: true }).status(200)
     }
-    return res.json({ message: "no match found" }).status(200)
+    return res.json({ message: 'no match found' }).status(200)
   } catch (e) {
     res.status(200).json({ error: "couldn't delete category" })
   }
@@ -143,7 +143,7 @@ router.delete("/category/:name", async (req, res) => {
   @desc adds a menu item to the database
   @access private (admin)
 */
-router.post("/menuitem/", async (req, res) => {
+router.post('/menuitem/', async (req, res) => {
   try {
     let { errors, isValid } = validateMenuItemInput(req.body)
 
@@ -156,12 +156,12 @@ router.post("/menuitem/", async (req, res) => {
         errors.category = "Category isn't in database"
       }
     } else {
-      errors.category = "Category field is empty"
+      errors.category = 'Category field is empty'
     }
 
     let foundName = await MenuItem.findOne({ name: req.body.name })
     if (foundName) {
-      errors.name = "already exists"
+      errors.name = 'already exists'
     }
 
     if (!isValid || !isEmpty(errors)) {
@@ -177,7 +177,7 @@ router.post("/menuitem/", async (req, res) => {
     res.json(data).status(200)
   } catch (e) {
     console.error(e)
-    res.status(500).json({ status: "failed", error: e })
+    res.status(500).json({ status: 'failed', error: e })
   }
 })
 
@@ -187,7 +187,7 @@ router.post("/menuitem/", async (req, res) => {
   @desc updates a menu item to the database
   @access private (admin)
 */
-router.put("/menuitem/:name", async (req, res) => {
+router.put('/menuitem/:name', async (req, res) => {
   try {
     const { errors, isValid } = validateMenuItemInput(req.body)
 
@@ -200,7 +200,7 @@ router.put("/menuitem/:name", async (req, res) => {
         errors.category = "Category isn't in database"
       }
     } else {
-      errors.category = "Category field is empty"
+      errors.category = 'Category field is empty'
     }
 
     if (!isValid || !isEmpty(errors)) {
@@ -219,7 +219,7 @@ router.put("/menuitem/:name", async (req, res) => {
       return res.json({ success: true }).status(200)
     }
 
-    return res.json({ message: "no match found" }).status(200)
+    return res.json({ message: 'no match found' }).status(200)
   } catch (e) {
     res.status(200).json({ error: "couldn't update menu item" })
   }
@@ -231,14 +231,14 @@ router.put("/menuitem/:name", async (req, res) => {
   @desc deletes a menu item to the database
   @access private (admin)
 */
-router.delete("/menuitem/:name", async (req, res) => {
+router.delete('/menuitem/:name', async (req, res) => {
   try {
     const cat = await MenuItem.findOne({ name: req.params.name })
     if (cat) {
       await MenuItem.findOneAndDelete({ name: req.params.name })
       return res.json({ success: true }).status(200)
     }
-    return res.json({ message: "no match found" }).status(200)
+    return res.json({ message: 'no match found' }).status(200)
   } catch (e) {
     res.status(200).json({ error: "couldn't delete menu item" })
   }
@@ -250,9 +250,9 @@ router.delete("/menuitem/:name", async (req, res) => {
   @desc   Get all branches
   @access Private
 */
-router.get("/branch/all", async (req, res) => {
+router.get('/branch/all', async (req, res) => {
   try {
-    const branchList = await Branch.find().populate("location", ["lat", "lon"])
+    const branchList = await Branch.find().populate('location', ['lat', 'lon'])
     return res.json(branchList).status(200)
   } catch (e) {
     res.json(e.message)
@@ -265,7 +265,7 @@ router.get("/branch/all", async (req, res) => {
   @desc   Create a branch
   @access Private
 */
-router.post("/branch/", async (req, res) => {
+router.post('/branch/', async (req, res) => {
   try {
     const { errors, isValid } = validateBranchInput(req.body)
 
@@ -296,7 +296,7 @@ router.post("/branch/", async (req, res) => {
   @desc   UPDATE a branch
   @access Private
 */
-router.patch("/branch/:id", async (req, res) => {
+router.patch('/branch/:id', async (req, res) => {
   try {
     const { errors, isValid } = validateBranchInput(req.body)
 
@@ -329,7 +329,7 @@ router.patch("/branch/:id", async (req, res) => {
   @desc   Delete an address
   @access Private
 */
-router.delete("/branch/:id", async (req, res) => {
+router.delete('/branch/:id', async (req, res) => {
   try {
     const id = req.params.id
     const branchList = await Branch.findOneAndDelete({ id: id })
@@ -345,11 +345,11 @@ router.delete("/branch/:id", async (req, res) => {
   @desc   Accept an order
   @access Private
 */
-router.post("/accept/:id", async (req, res) => {
+router.post('/accept/:id', async (req, res) => {
   try {
     const order = Order.findOneAndUpdate(
       { id: req.params.id },
-      { status: "accepted" },
+      { status: 'accepted' },
       { new: true }
     )
 
@@ -365,11 +365,11 @@ router.post("/accept/:id", async (req, res) => {
   @desc   Reject an order
   @access Private
 */
-router.post("/reject/:id", async (req, res) => {
+router.post('/reject/:id', async (req, res) => {
   try {
     const order = Order.findOneAndUpdate(
       { id: req.params.id },
-      { status: "rejected" },
+      { status: 'rejected' },
       { new: true }
     )
 
@@ -386,16 +386,16 @@ router.post("/reject/:id", async (req, res) => {
   @access Private
 */
 router.post(
-  "/profile-upload-single",
-  uploads.single("profile-file"),
+  '/profile-upload-single',
+  uploads.single('profile-file'),
   (req, res) => {
-    console.log("done")
-    res.send("done").status(200)
+    console.log('done')
+    res.send('done').status(200)
   }
 )
 
-router.get("/uploads", (req, res) => {
-  res.sendFile(path.join(__dirname, "../../upload.html"))
+router.get('/uploads', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../upload.html'))
 })
 
 module.exports = router

@@ -2,13 +2,10 @@ import React, { useState, useEffect } from 'react'
 import Select from 'react-select'
 import axios from 'axios'
 
-const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' },
-]
-
 function AddMenuItem() {
+  const [options, setOptions] = useState([
+    { value: null, label: 'Choose a category' },
+  ])
   const [price, setPrice] = useState(0)
   const [name, setName] = useState('')
   const [category, setCategory] = useState(options[0].value)
@@ -16,7 +13,12 @@ function AddMenuItem() {
   useEffect(() => {
     ;(async () => {
       const categories = await axios.get('/api/menu/categories')
-      console.log(categories)
+      setOptions(
+        categories.data.categories.map((obj) => ({
+          value: obj.name,
+          label: obj.name,
+        }))
+      )
     })()
   }, [])
 

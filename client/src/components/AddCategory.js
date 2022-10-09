@@ -18,9 +18,9 @@ function AddCategory() {
   }
 
   return (
-    <div className="h-screen flex flex-col justify-start items-center space-y-5 text-white">
+    <div className="h-screen flex flex-col justify-center items-center space-y-10 text-white">
       <h1 className="text-4xl">Add Category</h1>
-      <form onSubmit={addCategory} className="space-y-5 w-full sm:w-[350px]">
+      <form onSubmit={addCategory} className="space-y-10 w-full sm:w-[350px]">
         <input
           type="text"
           className="input"
