@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from "react"
-import Select from "react-select"
-import axios from "axios"
+import React, { useState, useEffect } from 'react'
+import Select from 'react-select'
+import axios from 'axios'
 
 const options = [
-  { value: "chocolate", label: "Chocolate" },
-  { value: "strawberry", label: "Strawberry" },
-  { value: "vanilla", label: "Vanilla" },
+  { value: 'chocolate', label: 'Chocolate' },
+  { value: 'strawberry', label: 'Strawberry' },
+  { value: 'vanilla', label: 'Vanilla' },
 ]
 
 function AddMenuItem() {
   const [price, setPrice] = useState(0)
-  const [name, setName] = useState("")
+  const [name, setName] = useState('')
   const [category, setCategory] = useState(options[0].value)
 
   useEffect(() => {
     ;(async () => {
-      const categories = await axios.get("/api/menu/categories")
+      const categories = await axios.get('/api/menu/categories')
       console.log(categories)
     })()
   }, [])
@@ -33,15 +33,14 @@ function AddMenuItem() {
   const addMenuItem = async (e) => {
     e.preventDefault()
     try {
-      const result = await axios.post(
-        "http://localhost:5000/api/admin/menuitem/",
-        {
-          name,
-          price,
-          category,
-        }
-      )
-    } catch (e) {}
+      await axios.post('http://localhost:5000/api/admin/menuitem/', {
+        name,
+        price,
+        category,
+      })
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   return (
@@ -70,7 +69,7 @@ function AddMenuItem() {
           styles={{
             control: (styles) => ({
               ...styles,
-              padding: "8px",
+              padding: '8px',
             }),
           }}
         />

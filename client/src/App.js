@@ -1,23 +1,23 @@
-import Menu from "./components/Menu"
-import Admin from "./components/Admin"
-import AddMenuItem from "./components/AddMenuItem"
-import AddCategory from "./components/AddCategory"
-import { useEffect, useState } from "react"
-import { Route, Routes, BrowserRouter as Router } from "react-router-dom"
-import axios from "axios"
+import Menu from './components/Menu'
+import AddMenuItem from './components/AddMenuItem'
+import AddCategory from './components/AddCategory'
+import React, { useEffect, useState } from 'react'
+import { Route, Routes, BrowserRouter as Router } from 'react-router-dom'
+import axios from 'axios'
 
 function App() {
   const [items, setItems] = useState([
     {
-      _id: "fewifoe",
-      name: "Chicken Sandwich",
-      category: { name: "Sandwiches" },
+      _id: 'fewifoe',
+      name: 'Chicken Sandwich',
+      category: { name: 'Sandwiches' },
     },
   ])
 
   useEffect(() => {
     ;(async () => {
-      await axios.get("/api/menu/items")
+      const itemsResult = await axios.get('/api/menu/items')
+      setItems(itemsResult.data)
     })()
   }, [])
 
