@@ -9,4 +9,4 @@ const IngredientSchema = new Schema({
   },
 })
 
-module.exports = Ingredients = mongoose.model('ingredients', IngredientSchema)
+module.exports = Ingredient = mongoose.model('ingredients', IngredientSchema)

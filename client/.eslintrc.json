@@ -24,6 +24,7 @@
             "imports": "never",
             "exports": "never",
             "functions": "never"
-        }]
+        }],
+        "multiline-ternary": "off"
     }
 }

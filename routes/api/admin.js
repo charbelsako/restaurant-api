@@ -4,6 +4,7 @@ const path = require('path')
 
 const User = require('../../models/User')
 const Category = require('../../models/Category')
+const Ingredient = require('../../models/Ingredient')
 const MenuItem = require('../../models/MenuItem')
 const Branch = require('../../models/Branch')
 
@@ -78,15 +79,19 @@ router.post('/category/', async (req, res) => {
     const { errors, isValid } = validateCategoryInput(req.body)
 
     if (!isValid) {
-      return res.json({ errors })
+      throw new Error('Category name must be at least 2 characters')
     }
 
     const categoryName = req.body.name
+
+    const duplicate = await Category.find({ name: categoryName }).lean()
+    if (duplicate.length > 0) throw new Error('Category already exists')
+
     const category = new Category({ name: categoryName })
     const data = await category.save()
     res.json(data).status(200)
   } catch (e) {
-    res.status(500).json({ status: 'failed', message: e.message, error: e })
+    res.status(500).json({ status: 'failed', errors: e.message })
   }
 })
 
@@ -101,15 +106,15 @@ router.post('/ingredient/', async (req, res) => {
     const { errors, isValid } = validateIngredientInput(req.body)
 
     if (!isValid) {
-      return res.json({ errors })
+      if (errors.name) throw new Error(errors.name)
     }
 
     const ingredientName = req.body.name
-    const ingredient = new Category({ name: ingredientName })
+    const ingredient = new Ingredient({ name: ingredientName })
     const data = await ingredient.save()
     res.json(data).status(200)
   } catch (e) {
-    res.status(500).json({ status: 'failed', message: e.message, error: e })
+    res.status(500).json({ status: 'failed', errors: e.message })
   }
 })
 
@@ -177,19 +182,20 @@ router.post('/menuitem/', async (req, res) => {
       categorySearch = await Category.findOne({ name: req.body.category })
       if (!categorySearch) {
         isValid = false
-        errors.category = "Category isn't in database"
+        throw new Error("Category isn't in database")
       }
     } else {
-      errors.category = 'Category field is empty'
+      throw new Error('Category field is empty')
     }
 
     let foundName = await MenuItem.findOne({ name: req.body.name })
     if (foundName) {
-      errors.name = 'already exists'
+      throw new Error('Item name already exists')
     }
 
     if (!isValid || !isEmpty(errors)) {
-      return res.status(400).json({ errors })
+      if (errors.price) throw new Error(errors.price)
+      if (errors.name) throw new Error(errors.name)
     }
 
     const name = req.body.name
@@ -201,7 +207,7 @@ router.post('/menuitem/', async (req, res) => {
     res.json(data).status(200)
   } catch (e) {
     console.error(e)
-    res.status(500).json({ status: 'failed', error: e })
+    res.status(500).json({ status: 'failed', errors: e.message })
   }
 })
 
