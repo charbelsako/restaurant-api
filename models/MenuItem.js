@@ -1,4 +1,4 @@
-const mongoose = require("mongoose")
+const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const MenuItemSchema = new Schema({
@@ -11,9 +11,15 @@ const MenuItemSchema = new Schema({
     required: true,
   },
   category: {
-    ref: "categories",
+    ref: 'categories',
     type: Schema.Types.ObjectId,
   },
+  ingredients: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'ingredients',
+    },
+  ],
 })
 
-module.exports = MenuItem = mongoose.model("items", MenuItemSchema)
+module.exports = MenuItem = mongoose.model('items', MenuItemSchema)

@@ -1,6 +1,7 @@
 import Menu from './components/Menu'
 import AddMenuItem from './components/AddMenuItem'
 import AddCategory from './components/AddCategory'
+import AddIngredient from './components/AddIngredient'
 import React, { useEffect, useState } from 'react'
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom'
 import axios from 'axios'
@@ -29,6 +30,7 @@ function App() {
           <Route path="/admin">
             <Route element={<AddMenuItem />} path="/admin/menuitem/add" />
             <Route element={<AddCategory />} path="/admin/category/add" />
+            <Route element={<AddIngredient />} path="/admin/ingredient/add" />
           </Route>
         </Routes>
       </Router>

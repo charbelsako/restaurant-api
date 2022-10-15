@@ -1,32 +1,31 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 
-function AddCategory() {
+function AddIngredients() {
   const [name, setName] = useState('')
 
   const onChangeName = (e) => {
     setName(e.target.value)
   }
 
-  const addCategory = async (e) => {
+  const addIngredient = async (e) => {
     e.preventDefault()
     try {
-      await axios.post('http://localhost:5000/api/admin/category/', {
+      await axios.post('http://localhost:5000/api/admin/ingredient/', {
         name,
       })
     } catch (e) {
       console.error(e)
     }
   }
-
   return (
     <div className="h-screen flex flex-col justify-center items-center space-y-10 text-white">
-      <h1 className="text-4xl">Add Category</h1>
-      <form onSubmit={addCategory} className="space-y-10 w-full sm:w-[350px]">
+      <h1 className="text-4xl">Add Ingredient</h1>
+      <form onSubmit={addIngredient} className="space-y-10 w-full sm:w-[350px]">
         <input
           type="text"
           className="input"
-          placeholder="Enter Category name here"
+          placeholder="Enter Ingredient name here"
           value={name}
           onChange={onChangeName}
         />
@@ -40,4 +39,4 @@ function AddCategory() {
   )
 }
 
-export default AddCategory
+export default AddIngredients

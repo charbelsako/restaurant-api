@@ -8,6 +8,7 @@ const MenuItem = require('../../models/MenuItem')
 const Branch = require('../../models/Branch')
 
 const validateCategoryInput = require('../../validation/category')
+const validateIngredientInput = require('../../validation/ingredient')
 const validateMenuItemInput = require('../../validation/menuItem')
 const validateBranchInput = require('../../validation/branch')
 const isEmpty = require('../../validation/is-empty')
@@ -83,6 +84,29 @@ router.post('/category/', async (req, res) => {
     const categoryName = req.body.name
     const category = new Category({ name: categoryName })
     const data = await category.save()
+    res.json(data).status(200)
+  } catch (e) {
+    res.status(500).json({ status: 'failed', message: e.message, error: e })
+  }
+})
+
+/*
+  @route /api/admin/ingredient/
+  @method POST
+  @desc adds a ingredient to the database
+  @access private (admin)
+*/
+router.post('/ingredient/', async (req, res) => {
+  try {
+    const { errors, isValid } = validateIngredientInput(req.body)
+
+    if (!isValid) {
+      return res.json({ errors })
+    }
+
+    const ingredientName = req.body.name
+    const ingredient = new Category({ name: ingredientName })
+    const data = await ingredient.save()
     res.json(data).status(200)
   } catch (e) {
     res.status(500).json({ status: 'failed', message: e.message, error: e })
