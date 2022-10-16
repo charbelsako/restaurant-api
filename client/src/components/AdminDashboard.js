@@ -39,6 +39,7 @@ function AdminDashboard() {
 
   const deleteIngredient = async (e) => {
     const id = e.target.dataset.id
+    await axios.delete(`/api/admin/ingredient/${id}`)
     setIngredients([...ingredients.filter((value) => value._id !== id)])
   }
 
