@@ -119,6 +119,21 @@ router.post('/ingredient/', async (req, res) => {
 })
 
 /*
+  @route /api/admin/ingredient/:id
+  @method DELETE
+  @desc Deletes an ingredient
+  @access private (admin)
+*/
+router.delete('/ingredient/:id', async (req, res) => {
+  try {
+    const ingredient = new Ingredient.findByIdAndDelete(req.params.id)
+    res.json(ingredient).status(200)
+  } catch (e) {
+    res.status(500).json({ status: 'failed', errors: e.message })
+  }
+})
+
+/*
   @route /api/admin/category/:name
   @method PUT
   @desc updates a category to the database
@@ -148,21 +163,20 @@ router.put('/category/:name', async (req, res) => {
 })
 
 /*
-  @route /api/admin/category/:name
+  @route /api/admin/category/:id
   @method DELETE
-  @desc deletes a category to the database
-  @access private (admin)
+  @desc deletes a category from the database
 */
-router.delete('/category/:name', async (req, res) => {
+router.delete('/category/:id', async (req, res) => {
   try {
-    const cat = await Category.findOne({ name: req.params.name })
+    const cat = await Category.findOne({ _id: req.params.id })
     if (cat) {
-      await Category.findOneAndDelete({ name: req.params.name })
+      await Category.findOneAndDelete({ _id: req.params.id })
       return res.json({ success: true }).status(200)
     }
-    return res.json({ message: 'no match found' }).status(200)
+    throw new Error('no match found')
   } catch (e) {
-    res.status(200).json({ error: "couldn't delete category" })
+    res.status(500).json({ error: "couldn't delete category" })
   }
 })
 
@@ -256,16 +270,16 @@ router.put('/menuitem/:name', async (req, res) => {
 })
 
 /*
-  @route /api/admin/menuitem/:name
+  @route /api/admin/menuitem/:id
   @method DELETE
   @desc deletes a menu item to the database
   @access private (admin)
 */
-router.delete('/menuitem/:name', async (req, res) => {
+router.delete('/menuitem/:id', async (req, res) => {
   try {
-    const cat = await MenuItem.findOne({ name: req.params.name })
+    const cat = await MenuItem.findOne({ _id: req.params.id })
     if (cat) {
-      await MenuItem.findOneAndDelete({ name: req.params.name })
+      await MenuItem.findOneAndDelete({ _id: req.params.id })
       return res.json({ success: true }).status(200)
     }
     return res.json({ message: 'no match found' }).status(200)
