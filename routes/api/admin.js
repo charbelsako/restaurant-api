@@ -223,8 +223,9 @@ router.post('/menuitem/', async (req, res) => {
       category: categoryId,
       ingredients,
     })
-    const data = await menuItem.save()
-    res.json(data).status(200)
+    const savedItem = await menuItem.save()
+    await savedItem.populate([{ path: 'category' }, { path: 'ingredients' }])
+    res.json(savedItem).status(200)
   } catch (e) {
     console.error(e)
     res.status(500).json({ status: 'failed', errors: e.message })
