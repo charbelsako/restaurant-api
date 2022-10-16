@@ -12,7 +12,7 @@ function AddMenuItem() {
   const [price, setPrice] = useState(0)
   const [name, setName] = useState('')
   const [category, setCategory] = useState(categoryOptions[0].value)
-  const [ingredient, setIngredient] = useState()
+  const [ingredients, setIngredient] = useState([])
 
   const [success, setSuccess] = useState(null)
   const [loading, setLoading] = useState(null)
@@ -44,13 +44,14 @@ function AddMenuItem() {
     setCategory(newValue.value)
   }
   const onChangeIngredient = (newValue) => {
-    setIngredient(newValue.value)
+    setIngredient([...ingredients, newValue[0].value])
   }
   const onChangeName = (e) => {
     setName(e.target.value)
   }
 
   const addMenuItem = async (e) => {
+    console.log(ingredients)
     e.preventDefault()
     try {
       setLoading(true)
@@ -58,7 +59,7 @@ function AddMenuItem() {
         name,
         price,
         category,
-        ingredient,
+        ingredients,
       })
       setSuccess(true)
     } catch (e) {

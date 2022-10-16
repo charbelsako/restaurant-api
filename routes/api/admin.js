@@ -215,8 +215,14 @@ router.post('/menuitem/', async (req, res) => {
     const name = req.body.name
     const price = req.body.price
     const categoryId = categorySearch.id
+    const ingredients = req.body.ingredients
 
-    const menuItem = new MenuItem({ name, price, category: categoryId })
+    const menuItem = new MenuItem({
+      name,
+      price,
+      category: categoryId,
+      ingredients,
+    })
     const data = await menuItem.save()
     res.json(data).status(200)
   } catch (e) {
