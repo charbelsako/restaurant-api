@@ -12,7 +12,7 @@ function AddMenuItem() {
   const [price, setPrice] = useState(0)
   const [name, setName] = useState('')
   const [category, setCategory] = useState(categoryOptions[0].value)
-  const [ingredient, setIngredient] = useState(categoryOptions[0].value)
+  const [ingredient, setIngredient] = useState()
 
   const [success, setSuccess] = useState(null)
   const [loading, setLoading] = useState(null)
@@ -73,11 +73,12 @@ function AddMenuItem() {
   return (
     <div className="flex flex-col justify-start h-screen items-center text-white space-y-10">
       <h1 className="text-4xl p-5 m-5">Add Menu Item</h1>
-      {success !== null && !!success ? (
+      {success && (
         <p className="text-green-500 bg-green-200 p-2 px-3 rounded">
           Everything went ok
         </p>
-      ) : (
+      )}
+      {error && !success && (
         <p className="text-red-500 bg-red-200 p-2 px-3 rounded">{error}</p>
       )}
       <form onSubmit={addMenuItem} className="space-y-10 w-full sm:w-[550px]">
