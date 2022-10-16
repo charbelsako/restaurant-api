@@ -6,4 +6,12 @@
   .input {
     @apply p-3 rounded text-black block w-full
   }
+
+  .dashboard-title {
+    @apply w-[75%] text-2xl
+  }
+
+  .admin-section {
+    @apply w-[50%] items-center flex
+  }
 }
