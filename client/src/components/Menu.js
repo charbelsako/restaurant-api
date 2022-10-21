@@ -37,15 +37,17 @@ export default function Menu({ items }) {
                     suffix=" LBP"
                   />
                 </div>
-                <div className="text-sm flex flex-row space-x-3">
-                  <h4>Ingredients: </h4>
-                  {item.ingredients.map((ingredient, index) => (
-                    <p key={ingredient._id}>
-                      {ingredient.name}
-                      {index + 1 < item.ingredients.length ? ',' : ''}
-                    </p>
-                  ))}
-                </div>
+                {item.ingredients.length > 0 ? (
+                  <div className="text-sm flex flex-row space-x-3">
+                    <h4>Ingredients: </h4>
+                    {item.ingredients.map((ingredient, index) => (
+                      <p key={ingredient._id}>
+                        {ingredient.name}
+                        {index + 1 < item.ingredients.length ? ',' : ''}
+                      </p>
+                    ))}
+                  </div>
+                ) : null}
               </div>
             ))}
           </>
