@@ -14,6 +14,7 @@ function App() {
       _id: 'fewifoe',
       name: 'Chicken Sandwich',
       category: { name: 'Sandwiches' },
+      ingredients: [],
     },
   ])
 

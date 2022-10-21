@@ -11,7 +11,9 @@ const Ingredient = require('../../models/Ingredient')
  */
 router.get('/items', async (req, res) => {
   try {
-    const items = await MenuItem.find({}).populate('category')
+    const items = await MenuItem.find({})
+      .populate('category')
+      .populate('ingredients')
 
     res.status(200).json({ items })
   } catch (e) {

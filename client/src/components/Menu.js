@@ -14,7 +14,7 @@ export default function Menu({ items }) {
   }, [items])
 
   return (
-    <div className="h-screen w-full text-white flex flex-col justify-center items-center">
+    <div className="h-screen w-full text-white flex flex-col justify-start p-5">
       {Object.keys(itemsByCategory).map((category) => {
         const items = itemsByCategory[category]
         return (
@@ -25,10 +25,10 @@ export default function Menu({ items }) {
             {items.map((item) => (
               <div
                 key={item._id}
-                className="flex flex-row items-center justify-center p-3 tracking-[3px]"
+                className="flex flex-col items-start justify-center pl-5 p-5 tracking-[3px]"
               >
-                <p className="text-md mr-3">{item.name.toUpperCase()}</p>
-                <p className="text-md">
+                <div className="flex flex-row">
+                  <p className="text-md mr-3">{item.name.toUpperCase()}</p>
                   <CurrencyFormat
                     displayType={'text'}
                     thousandSeparator={true}
@@ -36,7 +36,16 @@ export default function Menu({ items }) {
                     renderText={(value) => <p>{value}</p>}
                     suffix=" LBP"
                   />
-                </p>
+                </div>
+                <div className="text-sm flex flex-row space-x-3">
+                  <h4>Ingredients: </h4>
+                  {item.ingredients.map((ingredient, index) => (
+                    <p key={ingredient._id}>
+                      {ingredient.name}
+                      {index + 1 < item.ingredients.length ? ',' : ''}
+                    </p>
+                  ))}
+                </div>
               </div>
             ))}
           </>
