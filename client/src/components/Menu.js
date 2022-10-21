@@ -25,8 +25,13 @@ export default function Menu({ items }) {
             {items.map((item) => (
               <div
                 key={item._id}
-                className="flex flex-col items-start justify-center pl-5 p-5 tracking-[3px]"
+                className="flex flex-row items-center pl-5 p-5 tracking-[3px] space-x-5"
               >
+                <img
+                  src="https://iso.500px.com/wp-content/uploads/2015/03/business_cover.jpeg"
+                  alt=""
+                  className="w-[100px] h-[100px] object-cover"
+                />
                 <div className="flex flex-row">
                   <p className="text-md mr-3">{item.name.toUpperCase()}</p>
                   <CurrencyFormat
