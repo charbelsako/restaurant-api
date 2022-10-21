@@ -19,7 +19,7 @@ const findLocation = require('./utils')
 const multer = require('multer')
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '../../uploads'))
+    cb(null, path.join(__dirname, '../../client/src/uploads'))
   },
   filename: function (req, file, cb) {
     const name = file
@@ -186,7 +186,7 @@ router.delete('/category/:id', async (req, res) => {
   @desc adds a menu item to the database
   @access private (admin)
 */
-router.post('/menuitem/', async (req, res) => {
+router.post('/menuitem/', uploads.single('itemImage'), async (req, res) => {
   try {
     let { errors, isValid } = validateMenuItemInput(req.body)
 
@@ -212,16 +212,19 @@ router.post('/menuitem/', async (req, res) => {
       if (errors.name) throw new Error(errors.name)
     }
 
+    console.log(req.file)
     const name = req.body.name
     const price = req.body.price
     const categoryId = categorySearch.id
-    const ingredients = req.body.ingredients
+    const ingredients = req.body.ingredients.split(',')
+    const image = req.file.filename
 
     const menuItem = new MenuItem({
       name,
       price,
       category: categoryId,
       ingredients,
+      image,
     })
     const savedItem = await menuItem.save()
     await savedItem.populate([{ path: 'category' }, { path: 'ingredients' }])

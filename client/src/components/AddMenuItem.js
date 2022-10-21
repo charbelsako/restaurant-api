@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react'
 import Select from 'react-select'
 import axios from 'axios'
 import makeAnimated from 'react-select/animated'
+// import FormData from 'form-data'
 
 function AddMenuItem() {
   const animatedComponents = makeAnimated()
@@ -17,6 +19,7 @@ function AddMenuItem() {
   const [success, setSuccess] = useState(null)
   const [loading, setLoading] = useState(null)
   const [error, setError] = useState('')
+  const [itemImage, setItemImage] = useState({})
 
   useEffect(() => {
     ;(async () => {
@@ -49,18 +52,24 @@ function AddMenuItem() {
   const onChangeName = (e) => {
     setName(e.target.value)
   }
+  const onChangeImage = (e) => {
+    setItemImage(e.target.files[0])
+  }
 
   const addMenuItem = async (e) => {
     console.log(ingredients)
     e.preventDefault()
+    console.log(e)
+
     try {
+      const data = new FormData()
+      data.append('itemImage', itemImage, itemImage.name)
+      data.append('name', name)
+      data.append('price', price)
+      data.append('category', category)
+      data.append('ingredients', ingredients)
       setLoading(true)
-      await axios.post('http://localhost:5000/api/admin/menuitem/', {
-        name,
-        price,
-        category,
-        ingredients,
-      })
+      await axios.post('http://localhost:5000/api/admin/menuitem/', data)
       setSuccess(true)
     } catch (e) {
       setSuccess(false)
@@ -124,7 +133,12 @@ function AddMenuItem() {
             }),
           }}
         />
-        {/* Images?? */}
+        <input
+          type="file"
+          name="itemImage"
+          id="itemImage"
+          onChange={onChangeImage}
+        />
         <div>
           <button
             disabled={!!loading}

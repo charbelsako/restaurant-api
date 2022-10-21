@@ -4,15 +4,17 @@ const { Schema } = mongoose
 const MenuItemSchema = new Schema({
   name: {
     type: String,
-    required: true,
+    required: [true, 'Name is required'],
   },
+  image: String,
   price: {
     type: Number,
-    required: true,
+    required: [true, 'Price is required'],
   },
   category: {
     ref: 'categories',
     type: Schema.Types.ObjectId,
+    required: [true, 'Category is required'],
   },
   ingredients: [
     {
