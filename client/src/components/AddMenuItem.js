@@ -19,7 +19,7 @@ function AddMenuItem() {
   const [success, setSuccess] = useState(null)
   const [loading, setLoading] = useState(null)
   const [error, setError] = useState('')
-  const [itemImage, setItemImage] = useState({})
+  const [itemImage, setItemImage] = useState(null)
 
   useEffect(() => {
     ;(async () => {
@@ -57,13 +57,13 @@ function AddMenuItem() {
   }
 
   const addMenuItem = async (e) => {
-    console.log(ingredients)
     e.preventDefault()
-    console.log(e)
 
     try {
       const data = new FormData()
-      data.append('itemImage', itemImage, itemImage.name)
+      if (itemImage) {
+        data.append('itemImage', itemImage, itemImage.name)
+      }
       data.append('name', name)
       data.append('price', price)
       data.append('category', category)
@@ -73,7 +73,9 @@ function AddMenuItem() {
       setSuccess(true)
     } catch (e) {
       setSuccess(false)
-      setError(e.response.data.errors)
+      if (e.response) {
+        setError(e.response.data.errors)
+      }
       console.log(e)
     } finally {
       setLoading(false)

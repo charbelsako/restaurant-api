@@ -120,6 +120,21 @@ router.post('/ingredient/', async (req, res) => {
 
 /*
   @route /api/admin/ingredient/:id
+  @method GET
+  @desc Returns the ingredient specified
+  @access private (admin)
+*/
+router.get('/ingredient/:id', async (req, res) => {
+  try {
+    const ingredient = await Ingredient.findOne({ _id: req.params.id })
+    return res.json(ingredient).status(200)
+  } catch (e) {
+    res.status(200).json({ error: "couldn't retrieve ingredient" })
+  }
+})
+
+/*
+  @route /api/admin/ingredient/:id
   @method DELETE
   @desc Deletes an ingredient
   @access private (admin)
@@ -159,6 +174,21 @@ router.put('/category/:name', async (req, res) => {
     return res.json({ message: 'no match found' }).status(200)
   } catch (e) {
     res.status(200).json({ error: "couldn't update category" })
+  }
+})
+
+/*
+  @route /api/admin/category/:id
+  @method GET
+  @desc Returns the category specified
+  @access private (admin)
+*/
+router.get('/category/:id', async (req, res) => {
+  try {
+    const category = await Category.findOne({ _id: req.params.id })
+    return res.json(category).status(200)
+  } catch (e) {
+    res.status(200).json({ error: "couldn't retrieve cateogry" })
   }
 })
 
@@ -281,14 +311,31 @@ router.put('/menuitem/:name', async (req, res) => {
 
 /*
   @route /api/admin/menuitem/:id
+  @method GET
+  @desc Returns the menu item specified
+  @access private (admin)
+*/
+router.get('/menuitem/:id', async (req, res) => {
+  try {
+    const item = await MenuItem.findOne({ _id: req.params.id })
+      .populate('category')
+      .populate('ingredients')
+    return res.json(item).status(200)
+  } catch (e) {
+    res.status(200).json({ error: "couldn't retrieve menu item" })
+  }
+})
+
+/*
+  @route /api/admin/menuitem/:id
   @method DELETE
   @desc deletes a menu item to the database
   @access private (admin)
 */
 router.delete('/menuitem/:id', async (req, res) => {
   try {
-    const cat = await MenuItem.findOne({ _id: req.params.id })
-    if (cat) {
+    const item = await MenuItem.findOne({ _id: req.params.id })
+    if (item) {
       await MenuItem.findOneAndDelete({ _id: req.params.id })
       return res.json({ success: true }).status(200)
     }
