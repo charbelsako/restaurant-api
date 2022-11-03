@@ -30,14 +30,14 @@ function EditMenuItem() {
   useEffect(() => {
     ;(async () => {
       const categories = await axios.get('/api/menu/categories')
-      await setCategoryOptions(
+      setCategoryOptions(
         categories.data.categories.map((obj) => ({
           value: obj._id,
           label: obj.name,
         }))
       )
       const ingredients = await axios.get('/api/menu/ingredients')
-      await setIngredientOptions(
+      setIngredientOptions(
         ingredients.data.ingredients.map((obj) => ({
           value: obj._id,
           label: obj.name,
@@ -45,8 +45,9 @@ function EditMenuItem() {
       )
       // Select the ingredients and categories that belong the requested item
       const currentItem = await axios.get(`/api/admin/menuitem/${id}`)
-      await setName(currentItem.data.name)
-      await setPrice(currentItem.data.price)
+      console.log(currentItem.data.name)
+      setName(currentItem.data.name)
+      setPrice(currentItem.data.price)
 
       setIngredient(currentItem.data.ingredients)
       setCategory(currentItem.data.category.name)
@@ -92,7 +93,7 @@ function EditMenuItem() {
       data.append('category', category)
       data.append('ingredients', ingredients)
       setLoading(true)
-      await axios.put('http://localhost:5000/api/admin/menuitem/', data)
+      await axios.post(`http://localhost:5000/api/admin/menuitem/${id}`, data)
       setSuccess(true)
     } catch (e) {
       setSuccess(false)

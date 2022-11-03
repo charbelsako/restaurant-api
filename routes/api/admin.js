@@ -267,12 +267,13 @@ router.post('/menuitem/', uploads.single('itemImage'), async (req, res) => {
 
 /*
   @route /api/admin/menuitem/:name
-  @method PUT
+  @method POST
   @desc updates a menu item to the database
   @access private (admin)
 */
-router.put('/menuitem/:name', async (req, res) => {
+router.post('/menuitem/:id', uploads.single('itemImage'), async (req, res) => {
   try {
+    console.log(req.body)
     const { errors, isValid } = validateMenuItemInput(req.body)
 
     let categorySearch
@@ -290,7 +291,7 @@ router.put('/menuitem/:name', async (req, res) => {
     if (!isValid || !isEmpty(errors)) {
       return res.json({ errors }).status(400)
     }
-    const menuItem = await MenuItem.findOne({ name: req.params.name })
+    const menuItem = await MenuItem.findOne({ _id: req.params.id })
     if (menuItem) {
       await MenuItem.findOneAndUpdate(
         { _id: menuItem.id },
