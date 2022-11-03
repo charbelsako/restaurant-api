@@ -92,7 +92,7 @@ function EditMenuItem() {
       data.append('category', category)
       data.append('ingredients', ingredients)
       setLoading(true)
-      await axios.post('http://localhost:5000/api/admin/menuitem/', data)
+      await axios.put('http://localhost:5000/api/admin/menuitem/', data)
       setSuccess(true)
     } catch (e) {
       setSuccess(false)
