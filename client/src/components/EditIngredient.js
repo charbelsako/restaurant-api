@@ -1,11 +1,20 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useParams } from 'react-router-dom'
 
 function EditIngredients() {
+  const { id } = useParams()
   const [name, setName] = useState('')
   const [success, setSuccess] = useState(null)
   const [loading, setLoading] = useState(null)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    ;(async () => {
+      const ingredient = await axios.get(`/api/admin/ingredient/${id}`)
+      setName(ingredient.data.name)
+    })()
+  }, [])
 
   const onChangeName = (e) => {
     setName(e.target.value)
@@ -16,7 +25,7 @@ function EditIngredients() {
     e.preventDefault()
     try {
       setLoading(true)
-      await axios.put('http://localhost:5000/api/admin/ingredient/', {
+      await axios.put(`http://localhost:5000/api/admin/ingredient/${id}`, {
         name,
       })
       setSuccess(true)

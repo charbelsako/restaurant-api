@@ -1,11 +1,20 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useParams } from 'react-router-dom'
 
 function EditCategory() {
+  const { id } = useParams()
   const [name, setName] = useState('')
   const [success, setSuccess] = useState(null)
   const [loading, setLoading] = useState(null)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    ;(async () => {
+      const category = await axios.get(`/api/admin/category/${id}`)
+      setName(category.data.name)
+    })()
+  }, [])
 
   const onChangeName = (e) => {
     setName(e.target.value)
@@ -16,7 +25,7 @@ function EditCategory() {
     e.preventDefault()
     try {
       setLoading(true)
-      await axios.put('http://localhost:5000/api/admin/category/', {
+      await axios.put(`/api/admin/category/${id}`, {
         name,
       })
       setSuccess(true)

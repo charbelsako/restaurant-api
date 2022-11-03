@@ -85,7 +85,12 @@ function AdminDashboard() {
           >
             Delete
           </button>
-          <button className="bg-cyan-700 rounded p-3 ml-3">Edit</button>
+          <a
+            href={`/admin/category/edit/${category._id}`}
+            className="bg-cyan-700 rounded p-3 ml-3"
+          >
+            Edit
+          </a>
         </div>
       ))}
       <h2 className="dashboard-title">Ingredients</h2>
@@ -99,7 +104,12 @@ function AdminDashboard() {
           >
             Delete
           </button>
-          <button className="bg-cyan-700 rounded p-3 ml-3">Edit</button>
+          <a
+            href={`/admin/ingredient/edit/${ingredient._id}`}
+            className="bg-cyan-700 rounded p-3 ml-3"
+          >
+            Edit
+          </a>
         </div>
       ))}
     </div>

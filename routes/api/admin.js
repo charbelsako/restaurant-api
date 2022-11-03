@@ -121,6 +121,47 @@ router.post('/ingredient/', async (req, res) => {
 /*
   @route /api/admin/ingredient/:id
   @method GET
+  @desc Retrieves an ingredient from the database
+  @access private (admin)
+*/
+router.get('/ingredient/:id', async (req, res) => {
+  try {
+    const ingredient = await Ingredient.findById(req.params.id)
+    res.json(ingredient).status(200)
+  } catch (e) {
+    res.status(500).json({ status: 'failed', errors: e.message })
+  }
+})
+
+/*
+  @route /api/admin/ingredient/:id
+  @method PUT
+  @desc Edit an ingredient to the database
+  @access private (admin)
+*/
+router.put('/ingredient/:id', async (req, res) => {
+  try {
+    const { errors, isValid } = validateIngredientInput(req.body)
+
+    if (!isValid) {
+      if (errors.name) throw new Error(errors.name)
+    }
+
+    const ingredientName = req.body.name
+    const ingredient = await Ingredient.findOneAndUpdate(
+      { _id: req.params.id },
+      { name: ingredientName },
+      { new: true }
+    )
+    res.json(ingredient).status(200)
+  } catch (e) {
+    res.status(500).json({ status: 'failed', errors: e.message })
+  }
+})
+
+/*
+  @route /api/admin/ingredient/:id
+  @method GET
   @desc Returns the ingredient specified
   @access private (admin)
 */
@@ -154,26 +195,50 @@ router.delete('/ingredient/:id', async (req, res) => {
   @desc updates a category to the database
   @access private (admin)
 */
-router.put('/category/:name', async (req, res) => {
+// router.put('/category/:name', async (req, res) => {
+//   try {
+//     const { errors, isValid } = validateCategoryInput(req.body)
+
+//     if (!isValid) {
+//       return res.json({ errors }).status(400)
+//     }
+
+//     const cat = await Category.findOne({ name: req.params.name })
+//     if (cat) {
+//       await Category.findOneAndUpdate(
+//         { name: req.params.name },
+//         { name: req.body.name }
+//       )
+//       return res.json({ success: true }).status(200)
+//     }
+
+//     return res.json({ message: 'no match found' }).status(200)
+//   } catch (e) {
+//     res.status(200).json({ error: "couldn't update category" })
+//   }
+// })
+
+/*
+  @route /api/admin/category/:id
+  @method PUT
+  @desc Edits the category
+  @access private (admin)
+*/
+router.put('/category/:id', async (req, res) => {
   try {
     const { errors, isValid } = validateCategoryInput(req.body)
-
     if (!isValid) {
       return res.json({ errors }).status(400)
     }
 
-    const cat = await Category.findOne({ name: req.params.name })
-    if (cat) {
-      await Category.findOneAndUpdate(
-        { name: req.params.name },
-        { name: req.body.name }
-      )
-      return res.json({ success: true }).status(200)
-    }
-
-    return res.json({ message: 'no match found' }).status(200)
+    const category = await Category.findOneAndUpdate(
+      { _id: req.params.id },
+      { name: req.body.name },
+      { new: true }
+    )
+    return res.json(category).status(200)
   } catch (e) {
-    res.status(200).json({ error: "couldn't update category" })
+    res.status(200).json({ error: "couldn't retrieve cateogry" })
   }
 })
 
@@ -267,11 +332,11 @@ router.post('/menuitem/', uploads.single('itemImage'), async (req, res) => {
 
 /*
   @route /api/admin/menuitem/:name
-  @method POST
+  @method PUT
   @desc updates a menu item to the database
   @access private (admin)
 */
-router.post('/menuitem/:id', uploads.single('itemImage'), async (req, res) => {
+router.put('/menuitem/:id', uploads.single('itemImage'), async (req, res) => {
   try {
     console.log(req.body)
     const { errors, isValid } = validateMenuItemInput(req.body)
@@ -293,12 +358,15 @@ router.post('/menuitem/:id', uploads.single('itemImage'), async (req, res) => {
     }
     const menuItem = await MenuItem.findOne({ _id: req.params.id })
     if (menuItem) {
+      const image = req.file.filename
+
       await MenuItem.findOneAndUpdate(
         { _id: menuItem.id },
         {
           name: req.body.name,
           price: req.body.price,
           category: categorySearch.id,
+          image,
         }
       )
       return res.json({ success: true }).status(200)
