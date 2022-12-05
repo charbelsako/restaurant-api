@@ -318,7 +318,7 @@ router.post('/menuitem/', uploads.single('itemImage'), async (req, res) => {
       name,
       price,
       category: categoryId,
-      ingredients,
+      ingredients: ingredients,
       image,
     })
     const savedItem = await menuItem.save()
