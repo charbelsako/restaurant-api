@@ -47,7 +47,7 @@ function AddMenuItem() {
     setCategory(newValue.value)
   }
   const onChangeIngredient = (newValue) => {
-    setIngredient([...ingredients, newValue[0].value])
+    setIngredient([...ingredients, newValue[newValue.length - 1].value])
   }
   const onChangeName = (e) => {
     setName(e.target.value)
